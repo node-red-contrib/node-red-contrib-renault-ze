@@ -1,0 +1,40 @@
+<script type="text/javascript">
+    RED.nodes.registerType('renault-ze',{
+        category: 'Renault',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"renault-ze";
+        },
+        credentials: {
+            username: {type:"text"},
+            password: {type:"password"}
+        },
+        settings: {}
+    });
+</script>
+
+<script type="text/x-red" data-template-name="renault-ze">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-username"><i class="icon-tag"></i> Username</label>
+        <input type="text" id="node-input-username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="icon-tag"></i> Password</label>
+        <input type="password" id="node-input-password">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="renault-ze">
+    <p>A simple node that retrieves current charge information for a vehicle from the Renault ZE services. Requires the credentials for your login at https://www.services.renault-ze.com/user/login.</p>
+    <p>Currently only handles a single vehicle on the account.</p>
+</script>
