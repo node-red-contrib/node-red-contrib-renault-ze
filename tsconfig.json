@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs",
+        "lib": [
+            "es2015",
+            "dom"
+        ],
+        "allowJs": false,
+        "declaration": false,
+        "sourceMap": false,
+        "strict": false,
+        "outDir": "./nodes/",
+    },
+
+}
