@@ -1,24 +1,3 @@
-<script type="text/javascript">
-    RED.nodes.registerType('renault-ze',{
-        category: 'Renault',
-        color: '#a6bbcf',
-        defaults: {
-            name: {value:""}
-        },
-        inputs:1,
-        outputs:1,
-        icon: "file.png",
-        label: function() {
-            return this.name||"renault-ze";
-        },
-        credentials: {
-            username: {type:"text"},
-            password: {type:"password"}
-        },
-        settings: {}
-    });
-</script>
-
 <script type="text/x-red" data-template-name="renault-ze">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
