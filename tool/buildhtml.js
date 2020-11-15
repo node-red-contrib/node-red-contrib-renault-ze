@@ -11,12 +11,12 @@ function copyFile(filename, joinfiles, srcpath, dstpath){
     for (const item of joinfiles) {
         let joincontent = fs.readFileSync(path.join(dstpath, item), 'utf8');
 
+        // add differnt join options css, js, ...
+        // add search for <script src -> and include this file
         content = '<script type="text/javascript">\r\n'
             + joincontent.replace('Object.defineProperty(exports, "__esModule", { value: true });','')
             +'\r\n</script>\r\n\r\n'
-            + content
-                .replaceAll('<html','<script')
-                .replaceAll('</html>','</script>');
+            + content.replace(/html/g,'script');
         fs.unlinkSync(path.join(dstpath, item));
     }
     fs.writeFileSync(dst, content, 'utf8')
@@ -48,7 +48,6 @@ for (i = 0; i < entries.length; i ++)
                     }
                 }
             }
-            console.log(item, joinfiles);
             copyFile(item, joinfiles, searchpath, exportpath);
         }
     }

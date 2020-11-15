@@ -9,6 +9,10 @@
       "url": "https://github.com/watchforstock"
     }
   ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/node-red-contrib/node-red-contrib-renault-ze"
+  },
   "keywords": [
     "node-red",
     "renault",
@@ -30,7 +34,7 @@
   },
   "scripts": {
     "build": "npm run tsc",
-    "postbuild" : "node tool/buildhtml.js",
+    "postbuild": "node tool/buildhtml.js",
     "tsc": "tsc"
   }
 }
