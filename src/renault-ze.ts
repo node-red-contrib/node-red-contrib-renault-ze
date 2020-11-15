@@ -3,20 +3,24 @@ import {ZEServices} from "./ZEServices";
 import * as RED from "node-red";
 
 interface renaultZeConfig extends RED.NodeDef {
-    credentials: {
-        username: string,
-        password: string
-    }
+    credentials: renaultCredentials
 }
 
-export default function(RED: RED.NodeAPI) {
+interface renaultCredentials
+{
+    username: string,
+    password: string
+}
+
+export = function(RED: RED.NodeAPI) {
     function RenaultZENode(config: renaultZeConfig) {
         RED.nodes.createNode(this,config);
-        var node = this as RED.Node;
+        var node = this as RED.Node<renaultCredentials>;
       
+        node.credentials
         node.on('input', function(msg: any) {
             let s = new ZEServices();
-            s.login(config.credentials.username, config.credentials.password).then(() => {
+            s.login(node.credentials.username, node.credentials.password).then(() => {
                 s.chargingDetails().then(val => {
                     msg.payload = val;
                     node.send(msg);
