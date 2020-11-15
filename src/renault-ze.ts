@@ -17,7 +17,7 @@ export = function (RED: NodeAPI) {
         node.on('input', (msg: any) => {
 
             let accountId: string = null;
-            let vin;
+            let vin: string = null;
             ZE.login(node.credentials.username, node.credentials.password)
                 .then(() => {
                     return ZE.accounts();
@@ -27,9 +27,9 @@ export = function (RED: NodeAPI) {
                     return ZE.vehicles(accountId);
                 })
                 .then((vehicles) => {
-                    vin = vehicles[vin];
+                    vin = vehicles[0].vin;
                     return ZE.location(accountId, vin);
-                    
+
                     //   return Promise.all(
                     //[ZE.location(accountId, vin),
                     // ZE.chargingDetails() 
