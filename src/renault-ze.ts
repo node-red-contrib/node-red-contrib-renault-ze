@@ -1,42 +1,54 @@
 
-import {ZEServices} from "./ZEServices";
-import * as RED from "node-red";
+import { ZEServices } from "./ZEServices";
+import { NodeAPI, Node } from "node-red";
 
-interface renaultZeConfig extends RED.NodeDef {
-    credentials: renaultCredentials
-}
-
-interface renaultCredentials
-{
+interface renaultCredentials {
     username: string,
     password: string
 }
 
-export = function(RED: RED.NodeAPI) {
-    function RenaultZENode(config: renaultZeConfig) {
-        RED.nodes.createNode(this,config);
-        var node = this as RED.Node<renaultCredentials>;
-      
-        node.credentials
-        node.on('input', function(msg: any) {
-            let s = new ZEServices();
-            s.login(node.credentials.username, node.credentials.password).then(() => {
-                s.chargingDetails().then(val => {
-                    msg.payload = val;
-                    node.send(msg);
-                });
-            }).catch((err) => {
-                node.error(err);
-            });
-        });
+export = function (RED: NodeAPI) {
+    function RenaultZENode(config: any) {
+        var node = this as Node<renaultCredentials>;
+        RED.nodes.createNode(node, config);
 
-        this.on('close', function() {
+        let ZE = new ZEServices();
+
+        node.on('input', (msg: any) => {
+
+            let accountId: string = null;
+            let vin;
+            ZE.login(node.credentials.username, node.credentials.password)
+                .then(() => {
+                    return ZE.accounts();
+                })
+                .then((accounts) => {
+                    accountId = accounts[0].accountId;
+                    return ZE.vehicles(accountId);
+                })
+                .then((vehicles) => {
+                    vin = vehicles[vin];
+                    return ZE.location(accountId, vin);
+                    
+                    //   return Promise.all(
+                    //[ZE.location(accountId, vin),
+                    // ZE.chargingDetails() 
+                    //] );
+
+                })
+                .then((location)=> {
+                    node.send({ payload: location});
+                })
+                .catch((err) => {
+                    node.error(err);
+                });
         });
     }
-    RED.nodes.registerType("renault-ze",RenaultZENode,{
+
+    RED.nodes.registerType("renault-ze", RenaultZENode, {
         credentials: {
-            username: {type:"text"},
-            password: {type:"password"}
+            username: { type: "text" },
+            password: { type: "password" }
         }
     });
 }

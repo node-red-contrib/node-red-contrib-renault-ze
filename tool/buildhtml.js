@@ -5,7 +5,7 @@ function copyFile(filename, joinfiles, srcpath, dstpath){
 
     let src = path.join(srcpath, filename);
     let dst = path.join(dstpath, filename);
-    console.log(src, dst);
+
     let content = fs.readFileSync(src, 'utf8');
 
     for (const item of joinfiles) {
