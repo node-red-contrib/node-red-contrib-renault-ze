@@ -30,6 +30,7 @@
   },
   "scripts": {
     "build": "npm run tsc",
+    "postbuild" : "node tool/buildhtml.js",
     "tsc": "tsc"
   }
 }

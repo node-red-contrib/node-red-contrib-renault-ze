@@ -7,6 +7,7 @@ export class ZEServices {
     constructor() {
         this.token = "";
         this.vin = "";
+        console.log("---------- INIT ZE --------");
     }
     
     login(username:string , password: string) {
@@ -14,6 +15,9 @@ export class ZEServices {
             username,
             password,
         };
+
+        console.log("---------- Login --------");
+
         return new Promise((resolve, reject) => {
             fetch("https://www.services.renault-ze.com/api/user/login", {
                 "credentials": "omit",
