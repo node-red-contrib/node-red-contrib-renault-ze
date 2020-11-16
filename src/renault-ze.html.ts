@@ -1,5 +1,4 @@
 import {EditorRED} from "node-red";
-
 declare var RED: EditorRED;
 
 RED.nodes.registerType('renault-ze',{
