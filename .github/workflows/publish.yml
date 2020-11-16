@@ -16,24 +16,25 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
+        node-version: 15.x
 
     - name: npm install & set Version
       run: |
-        npm install
+        npm ci
         npm config set git-tag-version false
         npm version ${{ github.event.release.version }}
 
-    - name: Package
+    - name: Build & Package
       run: |
+        npm run build
         npm pack
 
-    - name: Publish
-      if: "!github.event.release.prerelease"
-      run: |
-        npm publish
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_API_KEY }}
+#    - name: Publish
+#      if: "!github.event.release.prerelease"
+#      run: |
+#        npm publish
+#      env:
+#        NPM_TOKEN: ${{ secrets.NPM_API_KEY }}
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
