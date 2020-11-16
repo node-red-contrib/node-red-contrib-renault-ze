@@ -62,8 +62,7 @@ export interface Accounts {
 //#endregion
 
 //#region Vehicles
-    export interface CancellationReason {
-    }
+    export interface CancellationReason {}
 
     export interface ConnectedDriver {
         role: string;
@@ -333,7 +332,7 @@ export class ZEServices {
         var account = await(await fetch(this.wiredProd.target
                 +"/commerce/v1/persons/"+personId
                 +"?country="+this.country
-                ,{ 
+                ,{
                     method: "GET",
                     headers:
                     {
@@ -355,7 +354,7 @@ export class ZEServices {
                 +"/commerce/v1/accounts/"+accountId
                 +"/vehicles"
                 +"?country="+country
-                ,{ 
+                ,{
                     method: "GET",
                     headers:
                     {
@@ -376,7 +375,7 @@ export class ZEServices {
                 +"/kamereon/kca/car-adapter/v1/cars/"+vin
                 +"/location"
                 +"?country="+country
-                ,{ 
+                ,{
                     method: "GET",
                     headers:
                     {
@@ -397,7 +396,7 @@ export class ZEServices {
                 +"/kamereon/kca/car-adapter/v2/cars/"+vin
                 +"/cockpit"
                 +"?country="+country
-                ,{ 
+                ,{
                     method: "GET",
                     headers:
                     {
@@ -418,7 +417,7 @@ export class ZEServices {
                 +"/kamereon/kca/car-adapter/v2/cars/"+vin
                 +"/battery-status"
                 +"?country="+country
-                ,{ 
+                ,{
                     method: "GET",
                     headers:
                     {
