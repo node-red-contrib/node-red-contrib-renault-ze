@@ -21,8 +21,6 @@ jobs:
 
     - name: npm install & set Version
       run: |
-        npm version
-        node -v
         npm ci
         npm config set git-tag-version false
         npm version ${{ github.event.release.tag_name }}
@@ -30,12 +28,9 @@ jobs:
     - name: build
       run: npm run build
  
-    - uses: actions/setup-node@v1
+    - uses: JS-DevTools/npm-publish@v1
       with:
-        registry-url: 'https://npm.pkg.github.com'
-    - run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.NPM_TOKEN }}
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
@@ -46,13 +41,3 @@ jobs:
         asset_path: ./node-red-contrib-renault-ze-${{ github.event.release.tag_name }}.tgz
         asset_name: node-red-contrib-renault-ze-${{ github.event.release.tag_name }}.tgz
         asset_content_type: application/zip
-
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '10.x' 
-        registry-url: 'https://registry.npmjs.org'
-
-    - run: npm publish
-      if: "!github.event.release.prerelease"      
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_API_KEY }}
