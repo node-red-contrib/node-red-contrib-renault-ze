@@ -5,7 +5,8 @@
 
 # Renault ZE Services node
 
-Provides functionality to retrieve data from the Renault ZE Services API. Designed to be installed into Node Red.
+Provides functionality to retrieve data from the Renault ZE Services API. Thanks to [Muscat's OxBlog](https://muscatoxblog.blogspot.com/2019/07/delving-into-renaults-new-api.html) for the documentation of the new API.
+Designed to be installed into Node Red.
 
 When triggered, the node will login and retrieve the status of the vehicles.
 It will output multiple messages for battery, cockpit,... payload see the following example:
@@ -30,3 +31,20 @@ It will output multiple messages for battery, cockpit,... payload see the follow
     }
 }
 ```
+
+# Install
+
+Install via the palette manage in the Node-RED admin ui (no restart needed). 
+
+Alternatively run the following command in your Node-RED user directory (typically `~/.node-red`):
+
+```sh
+npm install node-red-contrib-renault-ze
+```
+
+then restart Node-RED and add an instance of the renault-ze node.
+
+# Usage
+
+Just send a messages to the node and you will receive a lot of status messages.
+For details read the following [here](docs/usage.md).
