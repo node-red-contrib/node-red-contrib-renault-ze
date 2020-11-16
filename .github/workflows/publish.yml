@@ -29,12 +29,12 @@ jobs:
         npm run build
         npm pack
 
-#    - name: Publish
-#      if: "!github.event.release.prerelease"
-#      run: |
-#        npm publish
-#      env:
-#        NPM_TOKEN: ${{ secrets.NPM_API_KEY }}
+    - name: Publish
+      if: "!github.event.release.prerelease"
+      run: |
+        npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
