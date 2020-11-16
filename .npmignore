@@ -3,3 +3,4 @@ src/
 tool/
 tsconfig.json
 .*/
+*.tgz
