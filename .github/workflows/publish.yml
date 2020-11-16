@@ -24,8 +24,10 @@ jobs:
         npm config set git-tag-version false
         npm version ${{ github.event.release.tag_name }}
 
-    - name: build
-      run: npm run build
+    - name: build & pack
+      run:  |
+        npm run build
+        npm pack
 
     - uses: JS-DevTools/npm-publish@v1
       with:
