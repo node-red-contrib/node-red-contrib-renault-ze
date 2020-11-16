@@ -22,19 +22,19 @@ jobs:
       run: |
         npm ci
         npm config set git-tag-version false
-        npm version ${{ github.event.release.version }}
+        npm version ${{ github.event.release.tag_name }}
 
     - name: Build & Package
       run: |
         npm run build
         npm pack
 
-#    - name: Publish
-#      if: "!github.event.release.prerelease"
-#      run: |
-#        npm publish
-#      env:
-#        NPM_TOKEN: ${{ secrets.NPM_API_KEY }}
+    - name: Publish
+      if: "!github.event.release.prerelease"
+      run: |
+        npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPM_API_KEY}}
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
@@ -42,6 +42,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: '${{ github.event.release.upload_url }}' 
-        asset_path: ./node-red-contrib-renault-ze-${{ github.event.release.version }}.tgz
-        asset_name: node-red-contrib-renault-ze-${{ github.event.release.version }}.tgz
+        asset_path: ./node-red-contrib-renault-ze-${{ github.event.release.tag_name }}.tgz
+        asset_name: node-red-contrib-renault-ze-${{ github.event.release.tag_name }}.tgz
         asset_content_type: application/zip
