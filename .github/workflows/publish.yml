@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 15.x
+        node-version: '14.x'
 
     - name: npm install & set Version
       run: |
@@ -24,24 +24,19 @@ jobs:
         npm config set git-tag-version false
         npm version ${{ github.event.release.tag_name }}
 
-    - name: Build & Package
-      run: |
-        npm run build
-        npm pack
+    - name: build
+      run: npm run build
 
-    - name: Publish
-      if: "!github.event.release.prerelease"
-      run: |
-        npm publish --access public
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.NPM_API_KEY}}
+    - uses: JS-DevTools/npm-publish@v1
+      with:
+          token: ${{ secrets.NPM_TOKEN }}
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: '${{ github.event.release.upload_url }}' 
+        upload_url: '${{ github.event.release.upload_url }}'
         asset_path: ./node-red-contrib-renault-ze-${{ github.event.release.tag_name }}.tgz
         asset_name: node-red-contrib-renault-ze-${{ github.event.release.tag_name }}.tgz
         asset_content_type: application/zip
