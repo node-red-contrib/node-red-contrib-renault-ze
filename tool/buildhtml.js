@@ -6,7 +6,7 @@ function copyFile(filename, joinfiles, srcpath, dstpath){
     let src = path.join(srcpath, filename);
     let dst = path.join(dstpath, filename);
 
-    let content = fs.readFileSync(src, 'utf8');
+    let content = fs.readFileSync(src, 'utf8').replace(/html/g,'script');
 
     for (const item of joinfiles) {
         let joincontent = fs.readFileSync(path.join(dstpath, item), 'utf8');
@@ -16,7 +16,7 @@ function copyFile(filename, joinfiles, srcpath, dstpath){
         content = '<script type="text/javascript">\r\n'
             + joincontent.replace('Object.defineProperty(exports, "__esModule", { value: true });','')
             +'\r\n</script>\r\n\r\n'
-            + content.replace(/html/g,'script');
+            + content;
         fs.unlinkSync(path.join(dstpath, item));
     }
     fs.writeFileSync(dst, content, 'utf8')

@@ -1,31 +1,281 @@
 import "isomorphic-fetch";
 
-interface Accounts {
-    accountId: string;
-    accountType: string; // "MYRENAULT"
-    accountStatus: string; // "ACTIVE"
-    country:string; // "DE"
-    personId: string;
-    relationType: string; // "OWNER"
+//#region Accounts
+export interface RegisterData {
+    purposes: any[];
+    events: any[];
 }
 
-interface Vehicles {
-    vin: string;
+export interface Idp {
+    idpId: string;
+    idpType: string;
+    idpStatus: string;
+    login: string;
+    loginType: string;
+    lastLoginDate: Date;
+    termsConditionAcceptance: boolean;
+    termsConditionLastAcceptanceDate: Date;
+    registerData: RegisterData;
+    originUserId: string;
+    originApplicationName: string;
 }
+
+export interface Email {
+    emailType: string;
+    emailValue: string;
+    validityFlag: boolean;
+    createdDate: Date;
+    lastModifiedDate: Date;
+    functionalCreationDate: Date;
+    functionalModificationDate: Date;
+}
+
+export interface Account {
+    accountId: string;
+    accountType: string;
+    accountStatus: string;
+    country: string;
+    personId: string;
+    relationType: string;
+}
+
+export interface Accounts {
+    personId: string;
+    type: string;
+    country: string;
+    firstName: string;
+    lastName: string;
+    idp: Idp;
+    emails: Email[];
+    identities: any[];
+    myrRequest: boolean;
+    accounts: Account[];
+    partyId: string;
+    createdDate: Date;
+    lastModifiedDate: Date;
+    functionalCreationDate: Date;
+    functionalModificationDate: Date;
+    locale: string;
+    originApplicationName: string;
+    originUserId: string;
+}
+//#endregion
+
+//#region Vehicles
+    export interface CancellationReason {
+    }
+
+    export interface ConnectedDriver {
+        role: string;
+        createdDate: Date;
+        lastModifiedDate: Date;
+    }
+
+    export interface DeliveryCountry {
+        code: string;
+        label: string;
+    }
+
+    export interface Family {
+        code: string;
+        label: string;
+        group: string;
+    }
+
+    export interface Tcu {
+        code: string;
+        label: string;
+        group: string;
+    }
+
+    export interface NavigationAssistanceLevel {
+        code: string;
+        label: string;
+        group: string;
+    }
+
+    export interface Battery {
+        code: string;
+        label: string;
+        group: string;
+    }
+
+    export interface RadioType {
+        code: string;
+        label: string;
+        group: string;
+    }
+
+    export interface RegistrationCountry {
+        code: string;
+    }
+
+    export interface Brand {
+        label: string;
+    }
+
+    export interface Model {
+        code: string;
+        label: string;
+        group: string;
+    }
+
+    export interface Gearbox {
+        code: string;
+        label: string;
+        group: string;
+    }
+
+    export interface Version {
+        code: string;
+    }
+
+    export interface Energy {
+        code: string;
+        label: string;
+        group: string;
+    }
+
+    export interface Rendition {
+        resolutionType: string;
+        url: string;
+    }
+
+    export interface Asset {
+        assetType: string;
+        renditions: Rendition[];
+    }
+
+    export interface VehicleDetails {
+        vin: string;
+        engineType: string;
+        engineRatio: string;
+        modelSCR: string;
+        deliveryCountry: DeliveryCountry;
+        family: Family;
+        tcu: Tcu;
+        navigationAssistanceLevel: NavigationAssistanceLevel;
+        battery: Battery;
+        radioType: RadioType;
+        registrationCountry: RegistrationCountry;
+        brand: Brand;
+        model: Model;
+        gearbox: Gearbox;
+        version: Version;
+        energy: Energy;
+        registrationNumber: string;
+        vcd: string;
+        assets: Asset[];
+        yearsOfMaintenance: number;
+        connectivityTechnology: string;
+        easyConnectStore: boolean;
+        electrical: boolean;
+        rlinkStore: boolean;
+        deliveryDate: string;
+        retrievedFromDhs: boolean;
+        engineEnergyType: string;
+        radioCode: string;
+    }
+
+    export interface VehicleLink {
+        brand: string;
+        vin: string;
+        status: string;
+        linkType: string;
+        garageBrand: string;
+        mileage: number;
+        mileageDate: string;
+        startDate: string;
+        createdDate: Date;
+        lastModifiedDate: Date;
+        cancellationReason: CancellationReason;
+        connectedDriver: ConnectedDriver;
+        vehicleDetails: VehicleDetails;
+    }
+
+    export interface Vehicles {
+        accountId: string;
+        country: string;
+        vehicleLinks: VehicleLink[];
+    }
+//#endregion
+
+//#region "Location"
+    export interface LocationAttributes {
+        gpsLatitude: number;
+        gpsLongitude: number;
+        lastUpdateTime: Date;
+    }
+
+    export interface LocationData {
+        type: string;
+        id: string;
+        attributes: LocationAttributes;
+    }
+
+    export interface Location {
+        data: LocationData;
+    }
+//#endregion
+
+//#region "BatteryStatus"
+    export interface BatteryStatusAttributes {
+        timestamp: Date;
+        batteryLevel: number;
+        batteryTemperature: number;
+        batteryAutonomy: number;
+        batteryCapacity: number;
+        batteryAvailableEnergy: number;
+        plugStatus: number;
+        chargingStatus: number;
+        chargingRemainingTime: number;
+        chargingInstantaneousPower: number;
+    }
+
+    export interface BatteryStatusData {
+        type: string;
+        id: string;
+        attributes: BatteryStatusAttributes;
+    }
+
+    export interface BatteryStatus {
+        data: BatteryStatusData;
+    }
+//#endregion
+
+//#region Cockpit
+export interface CockpitAttributes {
+    fuelAutonomy: number;
+    fuelQuantity: number;
+    totalMileage: number;
+}
+
+export interface CockpitData {
+    type: string;
+    id: string;
+    attributes: CockpitAttributes;
+}
+
+export interface Cockpit {
+    data: CockpitData;
+}
+
+//#endregion
+
 interface Servers {
     target: string;
     apikey:string;
 }
 
 export class ZEServices {
-    jwt: string = null;
-    token: string = null;
-    gigyaProd: Servers = null;
-    wiredProd: Servers = null;
-    country: string ="DE";
+    private jwt: string = null;
+    private token: string = null;
+    private gigyaProd: Servers = null;
+    private wiredProd: Servers = null;
+    private country: string ="DE";
 
     private atob(a: string) {
-        return new Buffer(a, 'base64').toString('binary');
+        return Buffer.from(a, 'base64').toString('binary');
     }
 
     private parseJwt(token: string) {
@@ -63,6 +313,9 @@ export class ZEServices {
             + "/accounts.getJWT"
             + "?apikey=" + this.gigyaProd.apikey
             + "&fields=data.personId,data.gigyaDataCenter"
+
+// ADD expiration -> TTL in seconds default 300
+
             + "&oauth_token=" + this.token
             , { method: "POST" })).json();
 
@@ -71,11 +324,11 @@ export class ZEServices {
         return true;
     }
 
-    async accounts(): Promise<Accounts[]> {
+    async accounts(personId?:string, country?: string): Promise<Accounts> {
 
-        if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
+        if (!country) country = this.country;
 
-        let personId = this.parseJwt(this.jwt)["data.personId"];
+        if (!personId) personId = this.parseJwt(this.jwt)["data.personId"];
 
         var account = await(await fetch(this.wiredProd.target
                 +"/commerce/v1/persons/"+personId
@@ -89,17 +342,19 @@ export class ZEServices {
                     }
                 })).json();
 
-        return new Promise((resolve)=> {resolve(account.accounts)});;
+        return new Promise((resolve)=> {resolve(account)});;
     }
 
-    async vehicles(accountId: string): Promise<Vehicles[]> {
+    async vehicles(accountId: string, country?: string): Promise<Vehicles> {
+
+        if (!country) country = this.country;
 
         if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
 
         let vehicles = await(await fetch(this.wiredProd.target
                 +"/commerce/v1/accounts/"+accountId
                 +"/vehicles"
-                +"?country="+this.country
+                +"?country="+country
                 ,{ 
                     method: "GET",
                     headers:
@@ -109,18 +364,18 @@ export class ZEServices {
                     }
                 })).json();
 
-        return new Promise((resolve)=> {resolve(vehicles.vehicleLinks)});;
+        return new Promise((resolve)=> {resolve(vehicles)});;
     }
 
-    async location(accountId: string, vin: string): Promise<any> {
+    async location(accountId: string, vin: string, country?: string): Promise<Location> {
 
-        if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
+        if (!country) country = this.country;
 
         var result = await(await fetch(this.wiredProd.target
                 +"/commerce/v1/accounts/"+accountId
                 +"/kamereon/kca/car-adapter/v1/cars/"+vin
                 +"/location"
-                +"?country="+this.country
+                +"?country="+country
                 ,{ 
                     method: "GET",
                     headers:
@@ -133,10 +388,45 @@ export class ZEServices {
         return new Promise((resolve)=> {resolve(result)});;
     }
 
-    chargingDetails() {
-        //  this.jwtObject = this.parseJwt(json.id_token);
-        return new Promise((resolve, reject) => {
-            resolve();
-        });
+    async cockpit(accountId: string, vin: string, country?: string): Promise<Cockpit> {
+
+        if (!country) country = this.country;
+
+        var result = await(await fetch(this.wiredProd.target
+                +"/commerce/v1/accounts/"+accountId
+                +"/kamereon/kca/car-adapter/v2/cars/"+vin
+                +"/cockpit"
+                +"?country="+country
+                ,{ 
+                    method: "GET",
+                    headers:
+                    {
+                        "apikey" : this.wiredProd.apikey,
+                        "x-gigya-id_token": this.jwt
+                    }
+                })).json();
+
+        return new Promise((resolve)=> {resolve(result)});;
+    }
+
+    async battery(accountId: string, vin: string, country?: string): Promise<BatteryStatus> {
+
+        if (!country) country = this.country;
+
+        var result = await(await fetch(this.wiredProd.target
+                +"/commerce/v1/accounts/"+accountId
+                +"/kamereon/kca/car-adapter/v2/cars/"+vin
+                +"/battery-status"
+                +"?country="+country
+                ,{ 
+                    method: "GET",
+                    headers:
+                    {
+                        "apikey" : this.wiredProd.apikey,
+                        "x-gigya-id_token": this.jwt
+                    }
+                })).json();
+
+        return new Promise((resolve)=> {resolve(result)});;
     }
 }

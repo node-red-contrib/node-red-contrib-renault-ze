@@ -1,5 +1,5 @@
 
-import { ZEServices } from "./ZEServices";
+import { ZEServices, Vehicles } from "./ZEServices";
 import { NodeAPI, Node } from "node-red";
 
 interface renaultCredentials {
@@ -23,21 +23,31 @@ export = function (RED: NodeAPI) {
                     return ZE.accounts();
                 })
                 .then((accounts) => {
-                    accountId = accounts[0].accountId;
-                    return ZE.vehicles(accountId);
+                    let result: Promise<Vehicles>[] = [];
+                    for (let item of accounts.accounts)
+                    {
+                        result.push(ZE.vehicles(item.accountId))
+                    }
+                    return Promise.all(result);
                 })
                 .then((vehicles) => {
-                    vin = vehicles[0].vin;
-                    return ZE.location(accountId, vin);
+                    for(let account of vehicles)
+                    {
+                        for(let vehicles of account.vehicleLinks)
+                        {
+                            if ((msg?.topic ?? 'location') == 'location')
+                                ZE.location(account.accountId, vehicles.vin, account.country)
+                                    .then((result)=> node.send({...msg, topic: 'location', payload: result}));
+                            
+                            if ((msg?.topic ?? 'battery') == 'battery')
+                                ZE.battery(account.accountId, vehicles.vin, account.country)
+                                    .then((result)=> node.send({...msg, topic: 'battery', payload: result}));
 
-                    //   return Promise.all(
-                    //[ZE.location(accountId, vin),
-                    // ZE.chargingDetails() 
-                    //] );
-
-                })
-                .then((location)=> {
-                    node.send({ payload: location});
+                            if ((msg?.topic ?? 'cockpit') == 'cockpit')
+                                ZE.cockpit(account.accountId, vehicles.vin, account.country)
+                                    .then((result)=> node.send({...msg, topic: 'cockpit', payload: result}));
+                        }
+                    }
                 })
                 .catch((err) => {
                     node.error(err);
