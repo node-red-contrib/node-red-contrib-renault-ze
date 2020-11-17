@@ -474,8 +474,8 @@ export class ZEServices {
      * @param vin The vehicle identifier.
      * @param country optional country
      */
-    async chargeSchedule(accountId: string, vin: string, country?: string): Promise<Charge_Shedule> {
-        return this.getJSON<Charge_Shedule>(this.createPath(accountId, vin)+"/charge-schedule",country);
+    async chargeSchedule(accountId: string, vin: string, country?: string): Promise<Charge_Schedule> {
+        return this.getJSON<Charge_Schedule>(this.createPath(accountId, vin)+"/charge-schedule",country);
     }
 
     /**
