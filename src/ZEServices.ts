@@ -62,143 +62,145 @@ export interface Accounts {
 //#endregion
 
 //#region Vehicles
-    export interface CancellationReason {}
+// tslint:disable-next-line
+export interface CancellationReason {}
 
-    export interface ConnectedDriver {
-        role: string;
-        createdDate: Date;
-        lastModifiedDate: Date;
-    }
+export interface ConnectedDriver {
+    role: string;
+    createdDate: Date;
+    lastModifiedDate: Date;
+}
 
-    export interface DeliveryCountry {
-        code: string;
-        label: string;
-    }
+export interface DeliveryCountry {
+    code: string;
+    label: string;
+}
 
-    export interface Family {
-        code: string;
-        label: string;
-        group: string;
-    }
+export interface Family {
+    code: string;
+    label: string;
+    group: string;
+}
 
-    export interface Tcu {
-        code: string;
-        label: string;
-        group: string;
-    }
+export interface Tcu {
+    code: string;
+    label: string;
+    group: string;
+}
 
-    export interface NavigationAssistanceLevel {
-        code: string;
-        label: string;
-        group: string;
-    }
+export interface NavigationAssistanceLevel {
+    code: string;
+    label: string;
+    group: string;
+}
 
-    export interface Battery {
-        code: string;
-        label: string;
-        group: string;
-    }
+export interface Battery {
+    code: string;
+    label: string;
+    group: string;
+}
 
-    export interface RadioType {
-        code: string;
-        label: string;
-        group: string;
-    }
+export interface RadioType {
+    code: string;
+    label: string;
+    group: string;
+}
 
-    export interface RegistrationCountry {
-        code: string;
-    }
+export interface RegistrationCountry {
+    code: string;
+}
 
-    export interface Brand {
-        label: string;
-    }
+export interface Brand {
+    label: string;
+}
 
-    export interface Model {
-        code: string;
-        label: string;
-        group: string;
-    }
+export interface Model {
+    code: string;
+    label: string;
+    group: string;
+}
 
-    export interface Gearbox {
-        code: string;
-        label: string;
-        group: string;
-    }
+export interface Gearbox {
+    code: string;
+    label: string;
+    group: string;
+}
 
-    export interface Version {
-        code: string;
-    }
+export interface Version {
+    code: string;
+}
 
-    export interface Energy {
-        code: string;
-        label: string;
-        group: string;
-    }
+export interface Energy {
+    code: string;
+    label: string;
+    group: string;
+}
 
-    export interface Rendition {
-        resolutionType: string;
-        url: string;
-    }
+export interface Rendition {
+    resolutionType: string;
+    url: string;
+}
 
-    export interface Asset {
-        assetType: string;
-        renditions: Rendition[];
-    }
+export interface Asset {
+    assetType: string;
+    renditions: Rendition[];
+}
 
-    export interface VehicleDetails {
-        vin: string;
-        engineType: string;
-        engineRatio: string;
-        modelSCR: string;
-        deliveryCountry: DeliveryCountry;
-        family: Family;
-        tcu: Tcu;
-        navigationAssistanceLevel: NavigationAssistanceLevel;
-        battery: Battery;
-        radioType: RadioType;
-        registrationCountry: RegistrationCountry;
-        brand: Brand;
-        model: Model;
-        gearbox: Gearbox;
-        version: Version;
-        energy: Energy;
-        registrationNumber: string;
-        vcd: string;
-        assets: Asset[];
-        yearsOfMaintenance: number;
-        connectivityTechnology: string;
-        easyConnectStore: boolean;
-        electrical: boolean;
-        rlinkStore: boolean;
-        deliveryDate: string;
-        retrievedFromDhs: boolean;
-        engineEnergyType: string;
-        radioCode: string;
-    }
+export interface VehicleDetails {
+    vin: string;
+    engineType: string;
+    engineRatio: string;
+    modelSCR: string;
+    deliveryCountry: DeliveryCountry;
+    family: Family;
+    tcu: Tcu;
+    navigationAssistanceLevel: NavigationAssistanceLevel;
+    battery: Battery;
+    radioType: RadioType;
+    registrationCountry: RegistrationCountry;
+    brand: Brand;
+    model: Model;
+    gearbox: Gearbox;
+    version: Version;
+    energy: Energy;
+    registrationNumber: string;
+    vcd: string;
+    assets: Asset[];
+    yearsOfMaintenance: number;
+    connectivityTechnology: string;
+    easyConnectStore: boolean;
+    electrical: boolean;
+    rlinkStore: boolean;
+    deliveryDate: string;
+    retrievedFromDhs: boolean;
+    engineEnergyType: string;
+    radioCode: string;
+}
 
-    export interface VehicleLink {
-        brand: string;
-        vin: string;
-        status: string;
-        linkType: string;
-        garageBrand: string;
-        mileage: number;
-        mileageDate: string;
-        startDate: string;
-        createdDate: Date;
-        lastModifiedDate: Date;
-        cancellationReason: CancellationReason;
-        connectedDriver: ConnectedDriver;
-        vehicleDetails: VehicleDetails;
-    }
+export interface VehicleLink {
+    brand: string;
+    vin: string;
+    status: string;
+    linkType: string;
+    garageBrand: string;
+    mileage: number;
+    mileageDate: string;
+    startDate: string;
+    createdDate: Date;
+    lastModifiedDate: Date;
+    cancellationReason: CancellationReason;
+    connectedDriver: ConnectedDriver;
+    vehicleDetails: VehicleDetails;
+}
 
-    export interface Vehicles {
-        accountId: string;
-        country: string;
-        vehicleLinks: VehicleLink[];
-    }
+export interface Vehicles {
+    accountId: string;
+    country: string;
+    vehicleLinks: VehicleLink[];
+}
 //#endregion
 
+//#region Data Interfaces
 export interface DataContainer<T>
 {
     data: Data<T>;
@@ -209,6 +211,7 @@ export interface Data<T> {
     id?: string;
     attributes: T;
 }
+//#endregion
 
 //#region "Location"
 export interface LocationAttributes {
@@ -221,20 +224,20 @@ export interface Location extends DataContainer<LocationAttributes>{}
 //#endregion
 
 //#region "BatteryStatus"
-    export interface BatteryStatusAttributes {
-        timestamp: Date;
-        batteryLevel: number;
-        batteryTemperature: number;
-        batteryAutonomy: number;
-        batteryCapacity: number;
-        batteryAvailableEnergy: number;
-        plugStatus: number;
-        chargingStatus: number;
-        chargingRemainingTime: number;
-        chargingInstantaneousPower: number;
-    }
+export interface BatteryStatusAttributes {
+    timestamp: Date;
+    batteryLevel: number;
+    batteryTemperature: number;
+    batteryAutonomy: number;
+    batteryCapacity: number;
+    batteryAvailableEnergy: number;
+    plugStatus: number;
+    chargingStatus: number;
+    chargingRemainingTime: number;
+    chargingInstantaneousPower: number;
+}
 
-    export interface BatteryStatus extends DataContainer<BatteryStatusAttributes>{}
+export interface BatteryStatus extends DataContainer<BatteryStatusAttributes>{}
 //#endregion
 
 //#region Cockpit
@@ -280,10 +283,10 @@ export interface Calendar<T> {
 export interface SheduleAttributes<T> {
     calendar: Calendar<T>;
 }
-export interface HVAC_Shedule extends DataContainer<HVAC_Entry> {
+export interface HVAC_Schedule extends DataContainer<HVAC_Entry> {
 }
 
-export interface Charge_Shedule extends DataContainer<Charge_Entry> {
+export interface Charge_Schedule extends DataContainer<Charge_Entry> {
 }
 //#endregion
 
@@ -299,6 +302,7 @@ export class ZEServices {
     private wiredProd: Servers = null;
     private country: string ="DE";
 
+    //#region Parse JWT Function
     private atob(a: string) {
         return Buffer.from(a, 'base64').toString('binary');
     }
@@ -311,12 +315,18 @@ export class ZEServices {
         }).join(''));
         return JSON.parse(jsonPayload);
     }
+    //#endregion
 
     constructor() {
 
     }
 
-    async login(loginId: string, password: string) {
+    /**
+     * Login into the renault service and fetch on success the jwt for all further API Calls.
+     * @param loginId Username for the renault service.
+     * @param password Password for the renault service.
+     */
+    async login(loginId: string, password: string): Promise<boolean> {
 
         let configURL = 'https://renault-wrd-prod-1-euw1-myrapp-one.s3-eu-west-1.amazonaws.com/configuration/android/config_en_GB.json';
 
@@ -347,7 +357,7 @@ export class ZEServices {
         return true;
     }
 
-    async getJSON<T>(PATH: string, country?: string): Promise<T> {
+    private async getJSON<T>(PATH: string, country?: string): Promise<T> {
         if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
 
         if (!country) country = this.country;
@@ -364,7 +374,7 @@ export class ZEServices {
         return res.json();
     }
 
-    async postJSON<T>(data: DataContainer<any>, PATH: string, country?: string): Promise<T> {
+    private async postJSON<T>(data: DataContainer<any>, PATH: string, country?: string): Promise<T> {
         if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
 
         if (!country) country = this.country;
@@ -383,50 +393,98 @@ export class ZEServices {
         return res.json();
     }
 
-    private  createPath(accountId: string, vin: string, version: number=1):string
+    private createPath(accountId: string, vin: string, version: number=1):string
     {
         return "/commerce/v1/accounts/"+accountId+"/kamereon/kca/car-adapter/v"+version+"/cars/"+vin;
     }
 
+    /**
+     * Fetch all accounts
+     * @param personId optional personId, if not defined taken from the jwt
+     * @param country optional country
+     */
     async accounts(personId?:string, country?: string): Promise<Accounts> {
-
         if (!personId) personId = this.parseJwt(this.jwt)["data.personId"];
 
-        return this.getJSON<Accounts>("/commerce/v1/persons/"+personId
-                ,country);
+        return this.getJSON<Accounts>("/commerce/v1/persons/"+personId, country);
     }
 
+    /**
+     * Fetch all vehicles that in this account.
+     * @param accountId The accountId.
+     * @param country optional country
+     */
     async vehicles(accountId: string, country?: string): Promise<Vehicles> {
-        return this.getJSON<Vehicles>(
-                "/commerce/v1/accounts/"+accountId
-                +"/vehicles"
-                ,country);
+        return this.getJSON<Vehicles>("/commerce/v1/accounts/"+accountId+"/vehicles",country);
     }
 
+    /**
+     * Fetch the current location of the requested vehicle in the requested account.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
     async location(accountId: string, vin: string, country?: string): Promise<Location> {
         return this.getJSON<Location>(this.createPath(accountId, vin)+"/location",country);
     }
 
+    /**
+     * Fetch the current cockpit status of the requested vehicle in the requested account.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
     async cockpit(accountId: string, vin: string, country?: string): Promise<Cockpit> {
         return this.getJSON<Cockpit>(this.createPath(accountId, vin,2)+"/cockpit",country);
     }
 
+    /**
+     * Fetch the current battery status of the requested vehicle in the requested account.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */    
     async batteryStatus(accountId: string, vin: string, country?: string): Promise<BatteryStatus> {
         return this.getJSON<BatteryStatus>(this.createPath(accountId, vin,2)+"/battery-status",country);
     }
 
+    /**
+     * Fetch the current charge mode of the requested vehicle in the requested account.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
     async chargeMode(accountId: string, vin: string, country?: string): Promise<ChargeMode> {
         return this.getJSON<ChargeMode>(this.createPath(accountId, vin)+"/charge-mode",country);
     }
 
-    async hvacSchedule(accountId: string, vin: string, country?: string): Promise<HVAC_Shedule> {
-        return this.getJSON<HVAC_Shedule>(this.createPath(accountId, vin)+"/hvac-schedule",country);
+    /**
+     * Fetch the current ac schedule of the requested vehicle in the requested account.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
+    async hvacSchedule(accountId: string, vin: string, country?: string): Promise<HVAC_Schedule> {
+        return this.getJSON<HVAC_Schedule>(this.createPath(accountId, vin)+"/hvac-schedule",country);
     }
 
+    /**
+     * Fetch the current charge schedule of the requested vehicle in the requested account.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
     async chargeSchedule(accountId: string, vin: string, country?: string): Promise<Charge_Shedule> {
         return this.getJSON<Charge_Shedule>(this.createPath(accountId, vin)+"/charge-schedule",country);
     }
 
+    /**
+     * Set the charge mode of the defined vehicle in the defined account.
+     * @param mode The charge mode can be "always_charging" or "schedule_mode".
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
     async setChargeMode(mode: "always_charging" | "schedule_mode", accountId: string, vin: string, country?: string)
     {
         let data: DataContainer<any> = 
@@ -444,6 +502,13 @@ export class ZEServices {
         return this.postJSON<any>(data, this.createPath(accountId, vin)+"/action/charge-mode",country)
     }
 
+    /**
+     * Set the charge state of the defined vehicle in the defined account.
+     * @param charging With true the car tries to start charging, with false it stops the charging.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
     async setChargeState(charging: boolean, accountId: string, vin: string, country?: string)
     {
         let data: DataContainer<any> = 
@@ -461,10 +526,18 @@ export class ZEServices {
         return this.postJSON<any>(data, this.createPath(accountId, vin)+"/action/charging-start",country);
     }
 
-    async setACState(ac: boolean, temperature: number, accountId: string, vin: string, country?: string)
+    /**
+     * Set the AC state. Starts the AC with the targettemperature or stops with targettemperature = null.
+     * @param temperature The targettemperature for the ac.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
+    async setACState(targetTemperature: number, accountId: string, vin: string, country?: string)
     {
-        if (!temperature && temperature < 0 && temperature > 30)
-            temperature = 21;
+        let ac = !(targetTemperature ===null);
+        if (!targetTemperature && targetTemperature < 0 && targetTemperature > 30)
+        targetTemperature = 21;
 
         let data: DataContainer<any> = 
             {
@@ -474,22 +547,39 @@ export class ZEServices {
                     "attributes":
                     {
                         "action": ac ? "start" : "stop", // or cancel are allowed
-                        "targetTemperature": Number
+                        "targetTemperature": targetTemperature
                     }
                 }
             };
 
+        if (!ac) 
+            delete data.data.attributes.targetTemperature;
+        
         return this.postJSON<any>(data, this.createPath(accountId, vin)+"/action/hvac-start",country);
     }
 
-    async setChargeShedule(shedule: Charge_Shedule, temperature: number, accountId: string, vin: string, country?: string)
+    /**
+     * Set the charge schedule.
+     * @param shedule The schedule.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
+    async setChargeSchedule(shedule: Charge_Schedule, accountId: string, vin: string, country?: string)
     {
         shedule.data.type = "ChargeSchedule";
 
         return this.postJSON<any>(shedule, this.createPath(accountId, vin)+"/action/charge-schedule ",country);
     }
 
-    async setHVACVShedule(shedule: HVAC_Shedule, temperature: number, accountId: string, vin: string, country?: string)
+    /**
+     * Set the HACV schedule.
+     * @param shedule The schedule.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
+    async setHVACSchedule(shedule: HVAC_Schedule, accountId: string, vin: string, country?: string)
     {
         shedule.data.type = "HvacSchedule";
 

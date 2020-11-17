@@ -30,8 +30,8 @@ export = function (RED: NodeAPI) {
                     }
                     return Promise.all(result);
                 })
-                .then((vehicles) => {
-                    for(let account of vehicles)
+                .then((accountvehicles) => {
+                    for(let account of accountvehicles)
                     {
                         for(let vehicles of account.vehicleLinks)
                         {
@@ -39,13 +39,13 @@ export = function (RED: NodeAPI) {
                                 ZE.location(account.accountId, vehicles.vin, account.country)
                                     .then((result)=> node.send({...msg, topic: 'location', payload: result}));
                             
-                            if ((msg?.topic ?? 'battery') == 'battery')
-                                ZE.battery(account.accountId, vehicles.vin, account.country)
-                                    .then((result)=> node.send({...msg, topic: 'battery', payload: result}));
+                            if ((msg?.topic ?? 'battery-status') == 'battery-status')
+                                ZE.batteryStatus(account.accountId, vehicles.vin, account.country)
+                                    .then((result)=> node.send({...msg, topic: 'battery-status', payload: result}));
 
                             if ((msg?.topic ?? 'cockpit') == 'cockpit')
                                 ZE.cockpit(account.accountId, vehicles.vin, account.country)
-                                    .then((result)=> node.send({...msg, topic: 'cockpit', payload: result}));
+                                    .then((result)=> node.send({...msg, topic: 'cockpit', payload: result}));     
                         }
                     }
                 })
