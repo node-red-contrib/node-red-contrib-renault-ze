@@ -338,9 +338,7 @@ export class ZEServices {
             + "/accounts.getJWT"
             + "?apikey=" + this.gigyaProd.apikey
             + "&fields=data.personId,data.gigyaDataCenter"
-
-// ADD expiration -> TTL in seconds default 300
-
+            + "&expiration=3600" // TTL in seconds default 300
             + "&oauth_token=" + this.token
             , { method: "POST" })).json();
 
@@ -497,5 +495,4 @@ export class ZEServices {
 
         return this.postJSON<any>(shedule, this.createPath(accountId, vin)+"/action/hvac-schedule ",country);
     }
-
 }
