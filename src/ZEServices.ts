@@ -199,9 +199,14 @@ export interface Accounts {
     }
 //#endregion
 
+export interface DataContainer<T>
+{
+    data: Data<T>;
+}
+
 export interface Data<T> {
     type: string;
-    id: string;
+    id?: string;
     attributes: T;
 }
 
@@ -212,9 +217,7 @@ export interface LocationAttributes {
     lastUpdateTime: Date;
 }
 
-export interface Location {
-    data: Data<LocationAttributes>;
-}
+export interface Location extends DataContainer<LocationAttributes>{}
 //#endregion
 
 //#region "BatteryStatus"
@@ -231,9 +234,7 @@ export interface Location {
         chargingInstantaneousPower: number;
     }
 
-    export interface BatteryStatus {
-        data: Data<BatteryStatusAttributes>;
-    }
+    export interface BatteryStatus extends DataContainer<BatteryStatusAttributes>{}
 //#endregion
 
 //#region Cockpit
@@ -243,8 +244,7 @@ export interface CockpitAttributes {
     totalMileage: number;
 }
 
-export interface Cockpit {
-    data: Data<CockpitAttributes>;
+export interface Cockpit extends DataContainer<CockpitAttributes> {
 }
 //#endregion
 
@@ -253,8 +253,7 @@ export interface ChargeModeAttributes {
     "chargeMode": "always" | "always_charging" | "schedule_mode";
 }
 
-export interface ChargeMode {
-    data: Data<ChargeModeAttributes>;
+export interface ChargeMode extends DataContainer<ChargeModeAttributes> {
 }
 //#endregion
 
@@ -281,12 +280,10 @@ export interface Calendar<T> {
 export interface SheduleAttributes<T> {
     calendar: Calendar<T>;
 }
-export interface HVAC_Shedule {
-    data: Data<SheduleAttributes<HVAC_Entry>>;
+export interface HVAC_Shedule extends DataContainer<HVAC_Entry> {
 }
 
-export interface Charge_Shedule {
-    data: Data<SheduleAttributes<Charge_Entry>>;
+export interface Charge_Shedule extends DataContainer<Charge_Entry> {
 }
 //#endregion
 
@@ -352,109 +349,153 @@ export class ZEServices {
         return true;
     }
 
-    async accounts(personId?:string, country?: string): Promise<Accounts> {
+    async getJSON<T>(PATH: string, country?: string): Promise<T> {
+        if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
 
         if (!country) country = this.country;
+
+        var res = await fetch(this.wiredProd.target+PATH,{
+            method: "GET",
+            headers:
+            {
+                "apikey" : this.wiredProd.apikey,
+                "x-gigya-id_token": this.jwt
+            }
+        });
+
+        return res.json();
+    }
+
+    async postJSON<T>(data: DataContainer<any>, PATH: string, country?: string): Promise<T> {
+        if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
+
+        if (!country) country = this.country;
+
+        var res = await fetch(this.wiredProd.target+PATH,{
+            method: "POST",
+            body: JSON.stringify(data),
+            headers:
+            {
+                "apikey" : this.wiredProd.apikey,
+                "x-gigya-id_token": this.jwt,
+                "Content-Type": "application/vnd.api+json"
+            }
+        });
+
+        return res.json();
+    }
+
+    private  createPath(accountId: string, vin: string, version: number=1):string
+    {
+        return "/commerce/v1/accounts/"+accountId+"/kamereon/kca/car-adapter/v"+version+"/cars/"+vin;
+    }
+
+    async accounts(personId?:string, country?: string): Promise<Accounts> {
 
         if (!personId) personId = this.parseJwt(this.jwt)["data.personId"];
 
-        var account = await(await fetch(this.wiredProd.target
-                +"/commerce/v1/persons/"+personId
-                +"?country="+this.country
-                ,{
-                    method: "GET",
-                    headers:
-                    {
-                        "apikey" : this.wiredProd.apikey,
-                        "x-gigya-id_token": this.jwt
-                    }
-                })).json();
-
-        return new Promise((resolve)=> {resolve(account)});;
+        return this.getJSON<Accounts>("/commerce/v1/persons/"+personId
+                ,country);
     }
 
     async vehicles(accountId: string, country?: string): Promise<Vehicles> {
-
-        if (!country) country = this.country;
-
-        if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
-
-        let vehicles = await(await fetch(this.wiredProd.target
-                +"/commerce/v1/accounts/"+accountId
+        return this.getJSON<Vehicles>(
+                "/commerce/v1/accounts/"+accountId
                 +"/vehicles"
-                +"?country="+country
-                ,{
-                    method: "GET",
-                    headers:
-                    {
-                        "apikey" : this.wiredProd.apikey,
-                        "x-gigya-id_token": this.jwt
-                    }
-                })).json();
-
-        return new Promise((resolve)=> {resolve(vehicles)});;
+                ,country);
     }
 
     async location(accountId: string, vin: string, country?: string): Promise<Location> {
-
-        if (!country) country = this.country;
-
-        var result = await(await fetch(this.wiredProd.target
-                +"/commerce/v1/accounts/"+accountId
-                +"/kamereon/kca/car-adapter/v1/cars/"+vin
-                +"/location"
-                +"?country="+country
-                ,{
-                    method: "GET",
-                    headers:
-                    {
-                        "apikey" : this.wiredProd.apikey,
-                        "x-gigya-id_token": this.jwt
-                    }
-                })).json();
-
-        return new Promise((resolve)=> {resolve(result)});;
+        return this.getJSON<Location>(this.createPath(accountId, vin)+"/location",country);
     }
 
     async cockpit(accountId: string, vin: string, country?: string): Promise<Cockpit> {
-
-        if (!country) country = this.country;
-
-        var result = await(await fetch(this.wiredProd.target
-                +"/commerce/v1/accounts/"+accountId
-                +"/kamereon/kca/car-adapter/v2/cars/"+vin
-                +"/cockpit"
-                +"?country="+country
-                ,{
-                    method: "GET",
-                    headers:
-                    {
-                        "apikey" : this.wiredProd.apikey,
-                        "x-gigya-id_token": this.jwt
-                    }
-                })).json();
-
-        return new Promise((resolve)=> {resolve(result)});;
+        return this.getJSON<Cockpit>(this.createPath(accountId, vin,2)+"/cockpit",country);
     }
 
-    async battery(accountId: string, vin: string, country?: string): Promise<BatteryStatus> {
-
-        if (!country) country = this.country;
-
-        var result = await(await fetch(this.wiredProd.target
-                +"/commerce/v1/accounts/"+accountId
-                +"/kamereon/kca/car-adapter/v2/cars/"+vin
-                +"/battery-status"
-                +"?country="+country
-                ,{
-                    method: "GET",
-                    headers:
-                    {
-                        "apikey" : this.wiredProd.apikey,
-                        "x-gigya-id_token": this.jwt
-                    }
-                })).json();
-
-        return new Promise((resolve)=> {resolve(result)});;
+    async batteryStatus(accountId: string, vin: string, country?: string): Promise<BatteryStatus> {
+        return this.getJSON<BatteryStatus>(this.createPath(accountId, vin,2)+"/battery-status",country);
     }
+
+    async chargeMode(accountId: string, vin: string, country?: string): Promise<ChargeMode> {
+        return this.getJSON<ChargeMode>(this.createPath(accountId, vin)+"/charge-mode",country);
+    }
+
+    async hvacSchedule(accountId: string, vin: string, country?: string): Promise<HVAC_Shedule> {
+        return this.getJSON<HVAC_Shedule>(this.createPath(accountId, vin)+"/hvac-schedule",country);
+    }
+
+    async chargeSchedule(accountId: string, vin: string, country?: string): Promise<Charge_Shedule> {
+        return this.getJSON<Charge_Shedule>(this.createPath(accountId, vin)+"/charge-schedule",country);
+    }
+
+    async setChargeMode(mode: "always_charging" | "schedule_mode", accountId: string, vin: string, country?: string)
+    {
+        let data: DataContainer<any> = 
+            {
+                "data":
+                {
+                    "type":"ChargeMode",
+                    "attributes":
+                    {
+                        "action": mode
+                    }
+                }
+            };
+
+        return this.postJSON<any>(data, this.createPath(accountId, vin)+"/action/charge-mode",country)
+    }
+
+    async setChargeState(charging: boolean, accountId: string, vin: string, country?: string)
+    {
+        let data: DataContainer<any> = 
+            {
+                "data":
+                {
+                    "type":"ChargingStart",
+                    "attributes":
+                    {
+                        "action": charging ? "start" : "stop"
+                    }
+                }
+            };
+        
+        return this.postJSON<any>(data, this.createPath(accountId, vin)+"/action/charging-start",country);
+    }
+
+    async setACState(ac: boolean, temperature: number, accountId: string, vin: string, country?: string)
+    {
+        if (!temperature && temperature < 0 && temperature > 30)
+            temperature = 21;
+
+        let data: DataContainer<any> = 
+            {
+                "data":
+                {
+                    "type":"HvacStart",
+                    "attributes":
+                    {
+                        "action": ac ? "start" : "stop", // or cancel are allowed
+                        "targetTemperature": Number
+                    }
+                }
+            };
+
+        return this.postJSON<any>(data, this.createPath(accountId, vin)+"/action/hvac-start",country);
+    }
+
+    async setChargeShedule(shedule: Charge_Shedule, temperature: number, accountId: string, vin: string, country?: string)
+    {
+        shedule.data.type = "ChargeSchedule";
+
+        return this.postJSON<any>(shedule, this.createPath(accountId, vin)+"/action/charge-schedule ",country);
+    }
+
+    async setHVACVShedule(shedule: HVAC_Shedule, temperature: number, accountId: string, vin: string, country?: string)
+    {
+        shedule.data.type = "HvacSchedule";
+
+        return this.postJSON<any>(shedule, this.createPath(accountId, vin)+"/action/hvac-schedule ",country);
+    }
+
 }
