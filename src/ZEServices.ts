@@ -199,22 +199,22 @@ export interface Accounts {
     }
 //#endregion
 
+export interface Data<T> {
+    type: string;
+    id: string;
+    attributes: T;
+}
+
 //#region "Location"
-    export interface LocationAttributes {
-        gpsLatitude: number;
-        gpsLongitude: number;
-        lastUpdateTime: Date;
-    }
+export interface LocationAttributes {
+    gpsLatitude: number;
+    gpsLongitude: number;
+    lastUpdateTime: Date;
+}
 
-    export interface LocationData {
-        type: string;
-        id: string;
-        attributes: LocationAttributes;
-    }
-
-    export interface Location {
-        data: LocationData;
-    }
+export interface Location {
+    data: Data<LocationAttributes>;
+}
 //#endregion
 
 //#region "BatteryStatus"
@@ -231,14 +231,8 @@ export interface Accounts {
         chargingInstantaneousPower: number;
     }
 
-    export interface BatteryStatusData {
-        type: string;
-        id: string;
-        attributes: BatteryStatusAttributes;
-    }
-
     export interface BatteryStatus {
-        data: BatteryStatusData;
+        data: Data<BatteryStatusAttributes>;
     }
 //#endregion
 
@@ -249,16 +243,51 @@ export interface CockpitAttributes {
     totalMileage: number;
 }
 
-export interface CockpitData {
-    type: string;
-    id: string;
-    attributes: CockpitAttributes;
-}
-
 export interface Cockpit {
-    data: CockpitData;
+    data: Data<CockpitAttributes>;
+}
+//#endregion
+
+//#region ChargeMode
+export interface ChargeModeAttributes {
+    "chargeMode": "always" | "always_charging" | "schedule_mode";
 }
 
+export interface ChargeMode {
+    data: Data<ChargeModeAttributes>;
+}
+//#endregion
+
+//#region HVAC & Charge Shedule
+export interface HVAC_Entry {
+    startTime: string;
+    activationState: boolean;
+}
+
+export interface Charge_Entry extends HVAC_Entry {
+    duration: number;
+}
+
+export interface Calendar<T> {
+    monday: T[];
+    tuesday: T[];
+    wednesday: T[];
+    thursday: T[];
+    friday: T[];
+    saturday: T[];
+    sunday: T[];
+}
+
+export interface SheduleAttributes<T> {
+    calendar: Calendar<T>;
+}
+export interface HVAC_Shedule {
+    data: Data<SheduleAttributes<HVAC_Entry>>;
+}
+
+export interface Charge_Shedule {
+    data: Data<SheduleAttributes<Charge_Entry>>;
+}
 //#endregion
 
 interface Servers {
