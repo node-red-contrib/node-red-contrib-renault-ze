@@ -63,7 +63,7 @@ export interface Accounts {
 
 //#region Vehicles
 // tslint:disable-next-line
-export interface CancellationReason {}
+export interface CancellationReason { }
 
 export interface ConnectedDriver {
     role: string;
@@ -201,8 +201,7 @@ export interface Vehicles {
 //#endregion
 
 //#region Data Interfaces
-export interface DataContainer<T>
-{
+export interface DataContainer<T> {
     data: Data<T>;
 }
 
@@ -220,7 +219,7 @@ export interface LocationAttributes {
     lastUpdateTime: Date;
 }
 
-export interface Location extends DataContainer<LocationAttributes>{}
+export interface Location extends DataContainer<LocationAttributes> { }
 //#endregion
 
 //#region "BatteryStatus"
@@ -237,7 +236,7 @@ export interface BatteryStatusAttributes {
     chargingInstantaneousPower: number;
 }
 
-export interface BatteryStatus extends DataContainer<BatteryStatusAttributes>{}
+export interface BatteryStatus extends DataContainer<BatteryStatusAttributes> { }
 //#endregion
 
 //#region Cockpit
@@ -252,8 +251,11 @@ export interface Cockpit extends DataContainer<CockpitAttributes> {
 //#endregion
 
 //#region ChargeMode
+/**
+ * Chargemode is delayed if the action/start-charge is called with a startDateTime in the future
+ */
 export interface ChargeModeAttributes {
-    "chargeMode": "always" | "always_charging" | "schedule_mode";
+    "chargeMode": "always_charging" | "schedule_mode" | "delayed";
 }
 
 export interface ChargeMode extends DataContainer<ChargeModeAttributes> {
@@ -292,7 +294,7 @@ export interface Charge_Schedule extends DataContainer<Charge_Entry> {
 
 interface Servers {
     target: string;
-    apikey:string;
+    apikey: string;
 }
 
 export class ZEServices {
@@ -300,7 +302,7 @@ export class ZEServices {
     private token: string = null;
     private gigyaProd: Servers = null;
     private wiredProd: Servers = null;
-    private country: string ="DE";
+    private country: string = "DE";
 
     //#region Parse JWT Function
     private atob(a: string) {
@@ -358,15 +360,15 @@ export class ZEServices {
     }
 
     private async getJSON<T>(PATH: string, country?: string): Promise<T> {
-        if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
+        if (this.jwt == null) return new Promise((resolve) => { resolve(null) });
 
         if (!country) country = this.country;
 
-        var res = await fetch(this.wiredProd.target+PATH,{
+        var res = await fetch(this.wiredProd.target + PATH + '?country=' + country, {
             method: "GET",
             headers:
             {
-                "apikey" : this.wiredProd.apikey,
+                "apikey": this.wiredProd.apikey,
                 "x-gigya-id_token": this.jwt
             }
         });
@@ -375,16 +377,18 @@ export class ZEServices {
     }
 
     private async postJSON<T>(data: DataContainer<any>, PATH: string, country?: string): Promise<T> {
-        if (this.jwt == null) return new Promise((resolve)=> {resolve(null)});
+        if (this.jwt == null) return new Promise((resolve) => { resolve(null) });
 
         if (!country) country = this.country;
-
-        var res = await fetch(this.wiredProd.target+PATH,{
+        console.log(this.wiredProd.target + PATH + '?country=' + country);
+        console.log(data);
+        console.log(this.jwt);
+        var res = await fetch(this.wiredProd.target + PATH + '?country=' + country, {
             method: "POST",
             body: JSON.stringify(data),
             headers:
             {
-                "apikey" : this.wiredProd.apikey,
+                "apikey": this.wiredProd.apikey,
                 "x-gigya-id_token": this.jwt,
                 "Content-Type": "application/vnd.api+json"
             }
@@ -393,9 +397,8 @@ export class ZEServices {
         return res.json();
     }
 
-    private createPath(accountId: string, vin: string, version: number=1):string
-    {
-        return "/commerce/v1/accounts/"+accountId+"/kamereon/kca/car-adapter/v"+version+"/cars/"+vin;
+    private createPath(accountId: string, vin: string, version: number = 1): string {
+        return "/commerce/v1/accounts/" + accountId + "/kamereon/kca/car-adapter/v" + version + "/cars/" + vin;
     }
 
     /**
@@ -403,10 +406,10 @@ export class ZEServices {
      * @param personId optional personId, if not defined taken from the jwt
      * @param country optional country
      */
-    async accounts(personId?:string, country?: string): Promise<Accounts> {
+    async accounts(personId?: string, country?: string): Promise<Accounts> {
         if (!personId) personId = this.parseJwt(this.jwt)["data.personId"];
 
-        return this.getJSON<Accounts>("/commerce/v1/persons/"+personId, country);
+        return this.getJSON<Accounts>("/commerce/v1/persons/" + personId, country);
     }
 
     /**
@@ -415,7 +418,19 @@ export class ZEServices {
      * @param country optional country
      */
     async vehicles(accountId: string, country?: string): Promise<Vehicles> {
-        return this.getJSON<Vehicles>("/commerce/v1/accounts/"+accountId+"/vehicles",country);
+        return this.getJSON<Vehicles>("/commerce/v1/accounts/" + accountId + "/vehicles", country);
+    }
+
+    async getAttribute<T>(attribute: string, accountId: string, vin: string, country?: string): Promise<T> {
+        let version = 1;
+        switch (attribute) {
+            case 'cockpit':
+            case 'battery-status':
+                version = 2;
+                break;
+        }
+
+        return this.getJSON<T>(this.createPath(accountId, vin, version) + "/" + attribute, country);
     }
 
     /**
@@ -425,7 +440,7 @@ export class ZEServices {
      * @param country optional country
      */
     async location(accountId: string, vin: string, country?: string): Promise<Location> {
-        return this.getJSON<Location>(this.createPath(accountId, vin)+"/location",country);
+        return this.getAttribute<Location>("location", accountId, vin, country);
     }
 
     /**
@@ -435,7 +450,7 @@ export class ZEServices {
      * @param country optional country
      */
     async cockpit(accountId: string, vin: string, country?: string): Promise<Cockpit> {
-        return this.getJSON<Cockpit>(this.createPath(accountId, vin,2)+"/cockpit",country);
+        return this.getAttribute<Cockpit>("cockpit", accountId, vin, country);
     }
 
     /**
@@ -443,9 +458,9 @@ export class ZEServices {
      * @param accountId The accountId.
      * @param vin The vehicle identifier.
      * @param country optional country
-     */    
+     */
     async batteryStatus(accountId: string, vin: string, country?: string): Promise<BatteryStatus> {
-        return this.getJSON<BatteryStatus>(this.createPath(accountId, vin,2)+"/battery-status",country);
+        return this.getAttribute<BatteryStatus>("battery-status", accountId, vin, country);
     }
 
     /**
@@ -455,7 +470,7 @@ export class ZEServices {
      * @param country optional country
      */
     async chargeMode(accountId: string, vin: string, country?: string): Promise<ChargeMode> {
-        return this.getJSON<ChargeMode>(this.createPath(accountId, vin)+"/charge-mode",country);
+        return this.getAttribute<ChargeMode>("charge-mode", accountId, vin, country);
     }
 
     /**
@@ -465,7 +480,7 @@ export class ZEServices {
      * @param country optional country
      */
     async hvacSchedule(accountId: string, vin: string, country?: string): Promise<HVAC_Schedule> {
-        return this.getJSON<HVAC_Schedule>(this.createPath(accountId, vin)+"/hvac-schedule",country);
+        return this.getAttribute<HVAC_Schedule>("hvac-schedule", accountId, vin, country);
     }
 
     /**
@@ -475,31 +490,33 @@ export class ZEServices {
      * @param country optional country
      */
     async chargeSchedule(accountId: string, vin: string, country?: string): Promise<Charge_Schedule> {
-        return this.getJSON<Charge_Schedule>(this.createPath(accountId, vin)+"/charge-schedule",country);
+        return this.getAttribute<Charge_Schedule>("charge-schedule", accountId, vin, country);
     }
 
     /**
      * Set the charge mode of the defined vehicle in the defined account.
-     * @param mode The charge mode can be "always_charging" or "schedule_mode".
+     * @param mode The charge mode can be "always_charging"/"always" or "schedule_mode"/"schedule".
      * @param accountId The accountId.
      * @param vin The vehicle identifier.
      * @param country optional country
      */
-    async setChargeMode(mode: "always_charging" | "schedule_mode", accountId: string, vin: string, country?: string)
-    {
-        let data: DataContainer<any> = 
-            {
-                "data":
-                {
-                    "type":"ChargeMode",
-                    "attributes":
-                    {
-                        "action": mode
-                    }
-                }
-            };
+    async setChargeMode(mode: "always_charging" | "schedule_mode" | "always" | "schedule", accountId: string, vin: string, country?: string) {
+        if (mode == "always") mode = "always_charging";
+        if (mode == "schedule") mode = "schedule_mode";
 
-        return this.postJSON<any>(data, this.createPath(accountId, vin)+"/action/charge-mode",country)
+        let data: DataContainer<any> =
+        {
+            "data":
+            {
+                "type": "ChargeMode",
+                "attributes":
+                {
+                    "action": mode
+                }
+            }
+        };
+
+        return this.postJSON<any>(data, this.createPath(accountId, vin) + "/actions/charge-mode", country)
     }
 
     /**
@@ -509,21 +526,22 @@ export class ZEServices {
      * @param vin The vehicle identifier.
      * @param country optional country
      */
-    async setChargeState(charging: boolean, accountId: string, vin: string, country?: string)
-    {
-        let data: DataContainer<any> = 
+    async setChargeState(charging: boolean, accountId: string, vin: string, country?: string) {
+        //  "startDateTime" with format "YYYY-MM-DDThh:mm:ssZ"
+
+        let data: DataContainer<any> =
+        {
+            "data":
             {
-                "data":
+                "type": "ChargingStart",
+                "attributes":
                 {
-                    "type":"ChargingStart",
-                    "attributes":
-                    {
-                        "action": charging ? "start" : "stop"
-                    }
+                    "action": charging ? "start" : "stop"
                 }
-            };
-        
-        return this.postJSON<any>(data, this.createPath(accountId, vin)+"/action/charging-start",country);
+            }
+        };
+
+        return this.postJSON<any>(data, this.createPath(accountId, vin) + "/actions/charging-start", country);
     }
 
     /**
@@ -533,43 +551,50 @@ export class ZEServices {
      * @param vin The vehicle identifier.
      * @param country optional country
      */
-    async setACState(targetTemperature: number, accountId: string, vin: string, country?: string)
-    {
-        let ac = !(targetTemperature ===null);
+    async setHVACState(targetTemperature: number, accountId: string, vin: string, country?: string) {
+        if (typeof targetTemperature === "boolean") {
+            if (targetTemperature)
+                targetTemperature = 21;
+            else
+                targetTemperature = undefined;
+        }
+
+        let ac = !(targetTemperature === null);
         if (!targetTemperature && targetTemperature < 0 && targetTemperature > 30)
-        targetTemperature = 21;
+            targetTemperature = 21;
 
-        let data: DataContainer<any> = 
+        //  "startDateTime" with format "YYYY-MM-DDThh:mm:ssZ"
+
+        let data: DataContainer<any> =
+        {
+            "data":
             {
-                "data":
+                "type": "HvacStart",
+                "attributes":
                 {
-                    "type":"HvacStart",
-                    "attributes":
-                    {
-                        "action": ac ? "start" : "stop", // or cancel are allowed
-                        "targetTemperature": targetTemperature
-                    }
+                    "action": ac ? "start" : "stop", // or cancel are allowed
+                    "targetTemperature": targetTemperature
                 }
-            };
+            }
+        };
 
-        if (!ac) 
+        if (!ac)
             delete data.data.attributes.targetTemperature;
-        
-        return this.postJSON<any>(data, this.createPath(accountId, vin)+"/action/hvac-start",country);
+
+        return this.postJSON<any>(data, this.createPath(accountId, vin) + "/actions/hvac-start", country);
     }
 
     /**
      * Set the charge schedule.
-     * @param shedule The schedule.
+     * @param shedule The schedule, in the format { data: { attributes: { calendar: ...} }}
      * @param accountId The accountId.
      * @param vin The vehicle identifier.
      * @param country optional country
      */
-    async setChargeSchedule(shedule: Charge_Schedule, accountId: string, vin: string, country?: string)
-    {
+    async setChargeSchedule(shedule: Charge_Schedule, accountId: string, vin: string, country?: string) {
         shedule.data.type = "ChargeSchedule";
 
-        return this.postJSON<any>(shedule, this.createPath(accountId, vin)+"/action/charge-schedule ",country);
+        return this.postJSON<any>(shedule, this.createPath(accountId, vin, 2) + "/actions/charge-schedule ", country);
     }
 
     /**
@@ -579,10 +604,9 @@ export class ZEServices {
      * @param vin The vehicle identifier.
      * @param country optional country
      */
-    async setHVACSchedule(shedule: HVAC_Schedule, accountId: string, vin: string, country?: string)
-    {
+    async setHVACSchedule(shedule: HVAC_Schedule, accountId: string, vin: string, country?: string) {
         shedule.data.type = "HvacSchedule";
 
-        return this.postJSON<any>(shedule, this.createPath(accountId, vin)+"/action/hvac-schedule ",country);
+        return this.postJSON<any>(shedule, this.createPath(accountId, vin) + "/actions/hvac-schedule ", country);
     }
 }
