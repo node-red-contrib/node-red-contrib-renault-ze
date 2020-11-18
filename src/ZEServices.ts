@@ -380,9 +380,7 @@ export class ZEServices {
         if (this.jwt == null) return new Promise((resolve) => { resolve(null) });
 
         if (!country) country = this.country;
-        console.log(this.wiredProd.target + PATH + '?country=' + country);
-        console.log(data);
-        console.log(this.jwt);
+
         var res = await fetch(this.wiredProd.target + PATH + '?country=' + country, {
             method: "POST",
             body: JSON.stringify(data),
