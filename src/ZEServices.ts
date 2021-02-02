@@ -336,6 +336,8 @@ export class ZEServices {
 
         this.gigyaProd = config.servers.gigyaProd;
         this.wiredProd = config.servers.wiredProd;
+        // manual override kameron API key searching for new fetchable source
+        this.wiredProd.apikey = "Ae9FDWugRxZQAGm3Sxgk7uJn6Q4CGEA2"
 
         let oauth = await (await fetch(this.gigyaProd.target
             + "/accounts.login"
