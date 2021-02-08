@@ -354,6 +354,7 @@ export class ZEServices {
             + "&fields=data.personId,data.gigyaDataCenter"
             + "&expiration=3600" // TTL in seconds default 300
             + "&oauth_token=" + this.token
+            + "&login_token=" + this.token
             , { method: "POST" })).json();
 
         this.jwt = json.id_token;
