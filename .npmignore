@@ -1,6 +1,7 @@
 node_modules/
 src/
 tool/
+docs/
 tsconfig.json
 .*/
 *.tgz
