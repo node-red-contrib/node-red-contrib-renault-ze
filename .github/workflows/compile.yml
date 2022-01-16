@@ -2,13 +2,12 @@ name: compile
 
 on:
   push:
-    branches: [ master, development ]
     paths:
       - 'src/**'
       - '.github/workflows/compile.yml'
 
   pull_request:
-    branches: [ master, development ]
+    branches: [ main ]
     paths:
       - 'src/**'
       - '.github/workflows/compile.yml'
