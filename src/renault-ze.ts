@@ -27,8 +27,11 @@ export = function (RED: NodeAPI) {
             }
             else
                 topicList.push(msg.topic.toLowerCase());
+            
+            let username = msg.username ?? node.credentials.username;
+            let password = msg.password ?? node.credentials.password;
 
-            ZE.login(node.credentials.username, node.credentials.password)
+            ZE.login(username, password)
                 .then(() => {
                     return ZE.accounts();
                 })
