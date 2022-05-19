@@ -332,7 +332,25 @@ export class ZEServices {
 
         let configURL = 'https://renault-wrd-prod-1-euw1-myrapp-one.s3-eu-west-1.amazonaws.com/configuration/android/config_en_GB.json';
 
-        let config = await (await fetch(configURL, { method: "GET" })).json();
+        // add default config if the renault server is not available
+        let config = {
+                servers: {
+                    gigyaProd: {
+                        target: 'https://accounts.eu1.gigya.com',
+                        apikey: '3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668'
+                    },
+                    wiredProd: {
+                        target: 'https://api-wired-prod-1-euw1.wrd-aws.com',
+                        apikey: 'VAX7XYKGfa92yMvXculCkEFyfZbuM7Ss'
+                    }
+                }
+            };
+        
+        try {
+            config = await (await fetch(configURL, { method: "GET" })).json();
+        }
+        catch() {
+        }
 
         this.gigyaProd = config.servers.gigyaProd;
         this.wiredProd = config.servers.wiredProd;
