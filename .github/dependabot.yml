@@ -1,6 +1,16 @@
 version: 2
 updates:
 - package-ecosystem: npm
+  open-pull-requests-limit: 100
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "08:00"
+    timezone: Europe/Berlin
+  target-branch: main
+
+- package-ecosystem: "github-actions"
+  open-pull-requests-limit: 100
   directory: "/"
   schedule:
     interval: daily
