@@ -349,8 +349,7 @@ export class ZEServices {
         try {
             config = await (await fetch(configURL, { method: "GET" })).json();
         }
-        catch() {
-        }
+        catch { }
 
         this.gigyaProd = config.servers.gigyaProd;
         this.wiredProd = config.servers.wiredProd;
