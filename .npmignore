@@ -5,3 +5,4 @@ docs/
 tsconfig.json
 .*/
 *.tgz
+.gitpod.yml
