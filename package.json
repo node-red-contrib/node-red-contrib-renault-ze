@@ -36,6 +36,7 @@
   "scripts": {
     "build": "npm run tsc",
     "postbuild": "node tool/buildhtml.js",
+    "start": "npx node-red-pi --inspect",
     "tsc": "tsc"
   }
 }

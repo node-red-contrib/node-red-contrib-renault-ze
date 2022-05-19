@@ -6,7 +6,7 @@ tasks:
 
 ports:
   - port: 1880
-    onOpen: open-browser
+    #onOpen: open-browser
 
 github:
   prebuilds:
