@@ -1,0 +1,8 @@
+changelog:
+  categories:
+    - title: dependencies 🎉
+      labels:
+        - dependencies
+    - title: Features
+      labels:
+        - "*"
