@@ -8,6 +8,11 @@
 Provides functionality to retrieve data from the Renault ZE Services API. Thanks to [Muscat's OxBlog](https://muscatoxblog.blogspot.com/2019/07/delving-into-renaults-new-api.html) for the documentation of the new API.
 Designed to be installed into Node Red.
 
+## Supported Cars:
+
+* Renault Zoe
+* Dacia Spring
+
 When triggered, the node will login and retrieve the status of the vehicles.
 It will output multiple messages for battery, cockpit,... payload see the following example:
 
