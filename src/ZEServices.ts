@@ -562,9 +562,11 @@ export class ZEServices {
         return this.postJSON<any>(data, this.createPath(accountId, vin) + "/actions/charging-start", country);
     }
 
-    /**case "set-charge-pause":
-     *                                   ZE.setChargePause(msg.payload, account.accountId, vehicles.vin, account.country)
-     *                                       .then((result) => node.send({ ...msg, topic: topic, payload: result }));
+    /** Pause/Resume Charging for Dacia Spring.
+     * @param pause: If true, then pause; if false, then resume.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
      */
     async setChargePause(pause: boolean, accountId: string, vin: string, country?: string) {
         
@@ -572,10 +574,10 @@ export class ZEServices {
         {
             "data":
             {
-                "type": "ChargingStart",
+                "type": "ChargePauseResume",
                 "attributes":
                 {
-                    "action": charging ? "start" : "stop"
+                    "action": action ? "pause" : "resume"
                 }
             }
         };
