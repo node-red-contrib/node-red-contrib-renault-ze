@@ -581,6 +581,9 @@ export class ZEServices {
                 }
             }
         };
+        return this.postJSON<any>(data, this.createPath(accountId, vin) + "/charge/pause-resume", country);
+    }
+
     
     /**
      * Set the AC state. Starts the AC with the targettemperature or stops with targettemperature = null.
