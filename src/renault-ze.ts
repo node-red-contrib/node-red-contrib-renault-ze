@@ -60,6 +60,10 @@ export = function (RED: NodeAPI) {
                                         ZE.setChargeState(msg.payload, account.accountId, vehicles.vin, account.country)
                                             .then((result) => node.send({ ...msg, topic: topic, payload: result }));
                                         break;
+                                    case "set-charge-pause":
+                                        ZE.setChargePause(msg.payload, account.accountId, vehicles.vin, account.country)
+                                            .then((result) => node.send({ ...msg, topic: topic, payload: result }));
+                                        break;
                                     case "set-hvac-state":
                                         ZE.setHVACState(msg.payload, account.accountId, vehicles.vin, account.country)
                                             .then((result) => node.send({ ...msg, topic: topic, payload: result }));
