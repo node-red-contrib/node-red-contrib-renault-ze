@@ -562,6 +562,24 @@ export class ZEServices {
         return this.postJSON<any>(data, this.createPath(accountId, vin) + "/actions/charging-start", country);
     }
 
+    /**case "set-charge-pause":
+     *                                   ZE.setChargePause(msg.payload, account.accountId, vehicles.vin, account.country)
+     *                                       .then((result) => node.send({ ...msg, topic: topic, payload: result }));
+     */
+    async setChargePause(pause: boolean, accountId: string, vin: string, country?: string) {
+        
+        let data: DataContainer<any> =
+        {
+            "data":
+            {
+                "type": "ChargingStart",
+                "attributes":
+                {
+                    "action": charging ? "start" : "stop"
+                }
+            }
+        };
+    
     /**
      * Set the AC state. Starts the AC with the targettemperature or stops with targettemperature = null.
      * @param temperature The targettemperature for the ac.
