@@ -577,7 +577,7 @@ export class ZEServices {
                 "type": "ChargePauseResume",
                 "attributes":
                 {
-                    "action": action ? "pause" : "resume"
+                    "action": pause ? "pause" : "resume"
                 }
             }
         };
