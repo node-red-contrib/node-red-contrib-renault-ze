@@ -419,7 +419,7 @@ export class ZEServices {
         return "/commerce/v1/accounts/" + accountId + "/kamereon/kca/car-adapter/v" + version + "/cars/" + vin;
     }
 
-    private createPathSpring(accountId, vin) {
+    private createPathSpring(accountId: string, vin: string): string {
         return "/commerce/v1/accounts/" + accountId + "/kamereon/kcm/v1/vehicles/" + vin;
     }
     
