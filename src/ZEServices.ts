@@ -577,14 +577,14 @@ export class ZEServices {
         {
             "data":
             {
-                "type": "ChargingStart",
+                "type": "ChargePauseResume",
                 "attributes":
                 {
-                    "action": charging ? "start" : "stop"
+                    "action": pause ? "pause" : "resume"
                 }
             }
         };
-        return this.postJSON<any>(data, this.createPath(accountId, vin) + "/actions/charging-start", country);
+        return this.postJSON<any>(data, this.createPathSpring(accountId, vin) + "/actions/charging-start", country);
     }
 
     /**
