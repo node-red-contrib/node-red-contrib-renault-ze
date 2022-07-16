@@ -419,6 +419,10 @@ export class ZEServices {
         return "/commerce/v1/accounts/" + accountId + "/kamereon/kca/car-adapter/v" + version + "/cars/" + vin;
     }
 
+    private createPathSpring(accountId, vin) {
+        return "/commerce/v1/accounts/" + accountId + "/kamereon/kcm/v1/vehicles/" + vin;
+    }
+    
     /**
      * Fetch all accounts
      * @param personId optional personId, if not defined taken from the jwt
@@ -568,7 +572,7 @@ export class ZEServices {
      * @param vin The vehicle identifier.
      * @param country optional country
      */
-    async setChargePause(pause: boolean, accountId: string, vin: string, country?: string) {
+    async setChargePause(action: boolean, accountId: string, vin: string, country?: string) {
         
         let data: DataContainer<any> =
         {
@@ -577,11 +581,11 @@ export class ZEServices {
                 "type": "ChargePauseResume",
                 "attributes":
                 {
-                    "action": pause ? "pause" : "resume"
+                    "action": action ? "pause" : "resume"
                 }
             }
         };
-        return this.postJSON<any>(data, this.createPath(accountId, vin) + "/charge/pause-resume", country);
+        return this.postJSON<any>(data, this.createPathSpring(accountId, vin) + "/charge/pause-resume", country);
     }
 
     
