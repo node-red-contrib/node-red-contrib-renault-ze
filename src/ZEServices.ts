@@ -418,6 +418,10 @@ export class ZEServices {
     private createPath(accountId: string, vin: string, version: number = 1): string {
         return "/commerce/v1/accounts/" + accountId + "/kamereon/kca/car-adapter/v" + version + "/cars/" + vin;
     }
+    
+    private createPathSpring(accountId: string, vin: string): string {
+        return "/commerce/v1/accounts/" + accountId + "/kamereon/kcm/v1/vehicles/" + vin;
+    }
 
     /**
      * Fetch all accounts
@@ -558,8 +562,29 @@ export class ZEServices {
                 }
             }
         };
-
         return this.postJSON<any>(data, this.createPath(accountId, vin) + "/actions/charging-start", country);
+    }
+    
+    /**
+     * Pause and resume Charging for Dacia Spring.
+     * @param pause With true the car tries to pause charging, with false it resumes the charging.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
+    async setChargePause(pause: boolean, accountId: string, vin: string, country?: string) {
+        let data: DataContainer<any> =
+        {
+            "data":
+            {
+                "type": "ChargePauseResume",
+                "attributes":
+                {
+                    "action": pause ? "pause" : "resume"
+                }
+            }
+        };
+        return this.postJSON<any>(data, this.createPathSpring(accountId, vin) + "/actions/charging-start", country);
     }
 
     /**
