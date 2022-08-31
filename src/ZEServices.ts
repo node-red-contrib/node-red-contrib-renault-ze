@@ -584,7 +584,7 @@ export class ZEServices {
                 }
             }
         };
-        return this.postJSON<any>(data, this.createPathSpring(accountId, vin) + "/actions/charging-start", country);
+        return this.postJSON<any>(data, this.createPathSpring(accountId, vin) + "/charge/pause-resume", country);
     }
 
     /**
