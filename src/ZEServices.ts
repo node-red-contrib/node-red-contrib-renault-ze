@@ -446,7 +446,6 @@ export class ZEServices {
     async getAttribute<T>(attribute: string, accountId: string, vin: string, country?: string): Promise<T> {
         let version = 1;
         switch (attribute) {
-            case 'cockpit':
             case 'battery-status':
                 version = 2;
                 break;
