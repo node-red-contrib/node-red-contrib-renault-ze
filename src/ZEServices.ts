@@ -593,17 +593,20 @@ export class ZEServices {
      * @param vin The vehicle identifier.
      * @param country optional country
      */
-    async setHVACState(targetTemperature: number, accountId: string, vin: string, country?: string) {
+    async setHVACState(targetTemperature: number | boolean | null | undefined, accountId: string, vin: string, country?: string) {
         if (typeof targetTemperature === "boolean") {
             if (targetTemperature)
                 targetTemperature = 21;
             else
-                targetTemperature = undefined;
+                targetTemperature = null;
         }
 
-        let ac = !(targetTemperature === null);
-        if (!targetTemperature && targetTemperature < 0 && targetTemperature > 30)
-            targetTemperature = 21;
+        let sanitizedTemperature: number | undefined = undefined;
+        if (typeof targetTemperature === "number" && !Number.isNaN(targetTemperature)) {
+            sanitizedTemperature = targetTemperature;
+            if (sanitizedTemperature < 0 || sanitizedTemperature > 30)
+                sanitizedTemperature = 21;
+        }
 
         //  "startDateTime" with format "YYYY-MM-DDThh:mm:ssZ"
 
@@ -614,13 +617,13 @@ export class ZEServices {
                 "type": "HvacStart",
                 "attributes":
                 {
-                    "action": ac ? "start" : "stop", // or cancel are allowed
-                    "targetTemperature": targetTemperature
+                    "action": sanitizedTemperature !== undefined ? "start" : "stop", // or cancel are allowed
+                    "targetTemperature": sanitizedTemperature
                 }
             }
         };
 
-        if (!ac)
+        if (sanitizedTemperature === undefined)
             delete data.data.attributes.targetTemperature;
 
         return this.postJSON<any>(data, this.createPath(accountId, vin) + "/actions/hvac-start", country);
