@@ -16,13 +16,13 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v6
       with:
-        node-version: '14.x'
+        node-version: '20.x'
 
     - name: npm install & set Version
       run: |
         npm ci
         npm config set git-tag-version false
-        npm version ${{ github.event.release.tag_name }}
+        npm version ${{ github.event.release.tag_name }} --allow-same-version
 
     - name: build & pack
       run:  |
