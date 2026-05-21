@@ -10,6 +10,7 @@
         "declaration": false,
         "sourceMap": false,
         "strict": false,
+        "rootDir": "./src/",
         "outDir": "./nodes/",
     },
 
