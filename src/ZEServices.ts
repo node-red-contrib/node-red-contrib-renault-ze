@@ -337,7 +337,7 @@ export class ZEServices {
                 servers: {
                     gigyaProd: {
                         target: 'https://accounts.eu1.gigya.com',
-                        apikey: '3_7PLksOyBRkHv126x5WhHb-5pqC1qFR8pQjxSeLB6nhAnPERTUlwnYoznHSxwX668'
+                        apikey: '3_VgdkgtIRH3AdHvJm-cjV2ug2EFE0lxt0IJzMC4MFqZjFpn_GYFXVdNZ19L7wZX0N'
                     },
                     wiredProd: {
                         target: 'https://api-wired-prod-1-euw1.wrd-aws.com',
