@@ -239,6 +239,16 @@ export interface BatteryStatusAttributes {
 export interface BatteryStatus extends DataContainer<BatteryStatusAttributes> { }
 //#endregion
 
+//#region SocLevels
+export interface SocLevelsAttributes {
+    socMin: number;
+    socTarget: number;
+    lastEnergyUpdateTimestamp: Date;
+}
+
+export interface SocLevels extends DataContainer<SocLevelsAttributes> { }
+//#endregion
+
 //#region Cockpit
 export interface CockpitAttributes {
     fuelAutonomy: number;
@@ -492,6 +502,16 @@ export class ZEServices {
      */
     async chargeMode(accountId: string, vin: string, country?: string): Promise<ChargeMode> {
         return this.getAttribute<ChargeMode>("charge-mode", accountId, vin, country);
+    }
+
+    /**
+     * Fetch the current state of charge levels of the requested vehicle in the requested account.
+     * @param accountId The accountId.
+     * @param vin The vehicle identifier.
+     * @param country optional country
+     */
+    async socLevels(accountId: string, vin: string, country?: string): Promise<SocLevels> {
+        return this.getJSON<SocLevels>(this.createPathSpring(accountId, vin) + "/ev/soc-levels", country);
     }
 
     /**

@@ -18,6 +18,7 @@ cockpit        | get milage data
 location       | get the location
 battery-status | get battery status data
 charge-mode    | get the actual chargemode (always, scheduled, delayed)
+soc-levels     | get the target state of charge
 ...            |
 
 ## Set configuration

@@ -76,6 +76,10 @@ export = function (RED: NodeAPI) {
                                         ZE.setHVACSchedule(msg.payload, account.accountId, vehicles.vin, account.country)
                                             .then((result) => node.send({ ...msg, topic: topic, payload: result }));
                                         break;
+                                    case "soc-levels":
+                                        ZE.socLevels(account.accountId, vehicles.vin, account.country)
+                                            .then((result) => node.send({ ...msg, topic: topic, payload: result }));
+                                        break;
                                     default:
                                         ZE.getAttribute(topic, account.accountId, vehicles.vin, account.country)
                                             .then((result) => node.send({ ...msg, topic: topic, payload: result }));
